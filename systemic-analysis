@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Pincer Movement: A Systemic Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .flowchart-node {
+            border: 2px solid;
+            padding: 0.75rem;
+            text-align: center;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            position: relative;
+            z-index: 10;
+        }
+        .flowchart-line {
+            position: absolute;
+            background-color: #4b5563; 
+            z-index: 1;
+        }
+        .kpi-card {
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border-left: 5px solid;
+        }
+        .kpi-title {
+            font-size: 1.125rem;
+            font-weight: 500;
+        }
+        .kpi-value {
+            font-size: 3rem;
+            font-weight: 900;
+            line-height: 1.1;
+        }
+        .kpi-context {
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        .tab-button.active {
+            border-color: #DC2626;
+            background-color: #DC2626;
+            color: #ffffff;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background-color: #374151; 
+        }
+        .timeline-item {
+            position: relative;
+            width: 50%;
+        }
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            padding-right: 2rem;
+        }
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            padding-left: 2rem;
+        }
+        .timeline-dot {
+            content: '';
+            position: absolute;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1rem;
+            height: 1rem;
+            border-radius: 9999px;
+            background-color: #DC2626;
+            border: 3px solid #1f2937;
+            z-index: 10;
+        }
+        .timeline-item:nth-child(odd) .timeline-dot {
+            right: -0.5rem;
+            left: auto;
+            transform: translateX(0);
+        }
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: -0.5rem;
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+    <div class="container mx-auto p-4 md:p-8">
+        
+        <header class="text-center my-12">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight text-white">The Pincer Movement</h1>
+            <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">A systemic analysis of the two-front war on American democracy, fueled by a coordinated alliance between the bureaucratic overhaul of Project 2025 and the ideological mobilization of Christian Nationalist networks.</p>
+        </header>
+
+        <section id="introduction" class="mb-20">
+            <div class="kpi-card bg-gray-800 border-red-600 max-w-2xl mx-auto transition-transform transform hover:scale-105">
+                <p class="kpi-title text-gray-400">The Spark: A Monumental Political Donation</p>
+                <p class="kpi-value text-red-500">$1.6 Billion</p>
+                <p class="kpi-context text-gray-500">In 2021, Barre Seid donated his company to the Marble Freedom Trust, chaired by Leonard Leo. The subsequent sale created one of the largest single political advocacy contributions in U.S. history, providing immense financial power to reshape American law and society.</p>
+            </div>
+        </section>
+
+        <section id="twin-arms" class="text-center mb-20">
+            <h2 class="text-3xl font-bold mb-4 text-white">The Twin Arms of the Pincer</h2>
+            <p class="text-gray-400 max-w-3xl mx-auto mb-8">The movement advances on two coordinated fronts: one providing the bureaucratic and legal machinery for a governmental takeover, the other supplying the ideological fervor and grassroots energy to justify and propel it.</p>
+            <div class="max-w-4xl mx-auto">
+                <div class="mb-4 flex justify-center border-b border-gray-700">
+                    <button id="tab-machinery" class="tab-button text-gray-300 py-2 px-6 block hover:text-white hover:border-red-600 focus:outline-none border-b-2 font-medium transition-colors">Authoritarian Machinery</button>
+                    <button id="tab-engine" class="tab-button text-gray-300 py-2 px-6 block hover:text-white hover:border-red-600 focus:outline-none border-b-2 font-medium transition-colors">Theocratic Engine</button>
+                </div>
+                <div id="content-machinery" class="p-4 bg-gray-800 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2 text-red-500">Project 2025</h3>
+                    <p class="mt-2 text-gray-300">A 920-page playbook led by The Heritage Foundation, detailing a top-to-bottom overhaul of the federal government. It aims to dismantle the administrative state and install a cadre of ideologically vetted loyalists.</p>
+                </div>
+                <div id="content-engine" class="hidden p-4 bg-gray-800 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-2 text-red-500">Christian Nationalism</h3>
+                    <p class="mt-2 text-gray-300">Driven by doctrines like the Seven Mountains Mandate, networks like Ziklag and The Family Leader seek to assert "dominion" over all spheres of society, embedding their interpretation of biblical principles into law and culture.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="financial-engine" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-white">The Financial Engine</h2>
+            <p class="text-gray-400 text-center max-w-3xl mx-auto mb-8">Vast sums of "dark money" are funneled through a complex, opaque network of donor-advised funds (DAFs) to resource both arms of the pincer, obscuring donors and creating a self-reinforcing financial ecosystem.</p>
+            <div class="bg-gray-800 rounded-lg shadow-lg p-6 md:p-8">
+                 <h3 class="text-2xl font-bold mb-4 text-center text-white">Tracing the Dark Money Flow</h3>
+                <div class="chart-container h-96 md:h-[500px] max-w-4xl">
+                     <canvas id="fundingFlowChart"></canvas>
+                </div>
+                <p class="text-sm text-gray-500 mt-4 text-center">This chart illustrates the highly concentrated funding flowing from major trusts and DAFs to key operational groups. Amounts shown are illustrative of major documented grants in millions USD.</p>
+            </div>
+        </section>
+        
+        <section id="architects" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-white">The Architects & Enforcers</h2>
+            <p class="text-gray-400 text-center max-w-3xl mx-auto mb-8">The movement is orchestrated by a small cadre of interconnected individuals who move fluidly between think tanks, funding entities, advocacy groups, and government, ensuring ideological consistency and strategic coordination.</p>
+             <div class="bg-gray-800 rounded-lg shadow-lg p-6 md:p-8">
+                <h3 class="text-2xl font-bold mb-6 text-center text-white">Key Personnel Network</h3>
+                <div class="relative w-full overflow-x-auto p-4" style="min-height: 450px;">
+                    <div class="flex justify-around items-start mb-16">
+                        <div class="flowchart-node bg-gray-700 border-red-500 w-1/4">
+                            <p class="font-bold text-lg text-white">Leonard Leo</p>
+                            <p class="text-sm text-gray-400">The Financer</p>
+                        </div>
+                        <div class="flowchart-node bg-gray-700 border-red-500 w-1/4">
+                            <p class="font-bold text-lg text-white">Kevin Roberts</p>
+                            <p class="text-sm text-gray-400">The Planner</p>
+                        </div>
+                        <div class="flowchart-node bg-gray-700 border-red-500 w-1/4">
+                             <p class="font-bold text-lg text-white">Bob Vander Plaats</p>
+                             <p class="text-sm text-gray-400">The Mobilizer</p>
+                        </div>
+                    </div>
+                    <div class="absolute top-1/4 left-0 w-full h-px bg-gray-600"></div>
+                    <div class="absolute top-1/4 left-1/4 w-px h-16 bg-gray-600"></div>
+                    <div class="absolute top-1/4 left-1/2 w-px h-16 bg-gray-600"></div>
+                    <div class="absolute top-1/4 right-1/4 w-px h-16 bg-gray-600"></div>
+                    <div class="flex justify-around items-center absolute top-1/3 w-full mt-8">
+                         <div class="flowchart-node bg-gray-900 text-white w-1/5 border-gray-500"><p>Marble Freedom Trust / The 85 Fund</p></div>
+                         <div class="flowchart-node bg-gray-900 text-white w-1/5 border-gray-500"><p>Heritage Foundation / Project 2025</p></div>
+                         <div class="flowchart-node bg-gray-900 text-white w-1/5 border-gray-500"><p>The Family Leader / Ziklag</p></div>
+                    </div>
+                    <div class="absolute top-[48%] left-1/4 w-px h-16 bg-gray-600"></div>
+                    <div class="absolute top-[48%] left-1/2 w-px h-16 bg-gray-600"></div>
+                     <div class="absolute top-[48%] right-1/4 w-px h-16 bg-gray-600"></div>
+                    <div class="absolute top-[60%] left-0 w-full h-px bg-gray-600"></div>
+                    <div class="absolute top-[60%] left-1/2 w-px h-16 bg-gray-600"></div>
+                    <div class="text-center absolute top-2/3 left-1/2 -translate-x-1/2 w-1/2 mt-8">
+                        <div class="flowchart-node border-red-700 bg-red-900/50">
+                            <p class="font-bold text-xl text-white">The Goal: Systemic Transformation</p>
+                            <p class="text-sm text-gray-300">Reshape American Governance, Law, and Culture</p>
+                        </div>
+                    </div>
+                </div>
+                 <p class="text-sm text-gray-500 mt-4 text-center">This diagram shows how key figures lead organizations that form the financial, policy, and grassroots arms of the movement, all driving towards a unified goal.</p>
+            </div>
+        </section>
+
+        <section id="ideological-blueprint" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-white">The Ideological Blueprint</h2>
+            <p class="text-gray-400 text-center max-w-3xl mx-auto mb-8">The movement's policy goals are often a direct translation of theological mandates into legal text. The Seven Mountains Mandate provides a framework for Christian "dominion" over society, and Iowa provides a clear example of its implementation.</p>
+             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-gray-800 rounded-lg shadow-lg p-6">
+                    <h3 class="text-2xl font-bold mb-4 text-red-500">Theology: The Seven Mountains Mandate</h3>
+                     <div class="chart-container" style="height: 300px;">
+                        <canvas id="sevenMountainsChart"></canvas>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2 text-center">This dominionist strategy calls for Christians to "rule and reign" over the seven primary spheres of societal influence.</p>
+                </div>
+                <div class="bg-gray-800 rounded-lg shadow-lg p-6 flex flex-col justify-center">
+                    <h3 class="text-2xl font-bold mb-4 text-red-500">Policy: Iowa SF 418</h3>
+                    <p class="mb-4 text-gray-300">This law, championed by groups like The Family Leader, directly implements the mandate's goals by codifying specific religious views on gender and family into state law.</p>
+                    <ul class="space-y-3 list-disc list-inside text-gray-400">
+                        <li><strong>Government:</strong> Rewrites civil rights law based on a specific biological definition of "sex".</li>
+                        <li><strong>Education:</strong> Prohibits instruction on gender theory and sexual orientation in grades K-6.</li>
+                        <li><strong>Family:</strong> Enforces a state-sanctioned view of gender, impacting family structures and individual rights.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="bureaucratic-weapon" class="mb-20">
+             <h2 class="text-3xl font-bold text-center mb-4 text-white">The Bureaucratic Weapon</h2>
+            <p class="text-gray-400 text-center max-w-3xl mx-auto mb-8">Project 2025's "Mandate for Leadership" details the mechanisms to seize control of the government from within, neutralizing institutional resistance.</p>
+             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="kpi-card bg-gray-800 border-red-600">
+                    <p class="kpi-title text-gray-400">Schedule F: The Loyalty Test</p>
+                    <p class="kpi-value text-red-500">50,000+</p>
+                    <p class="kpi-context text-gray-500">Estimated number of federal civil servants who could be stripped of job protections and replaced by political loyalists, ensuring ideological conformity.</p>
+                </div>
+                 <div class="bg-gray-800 rounded-lg shadow-md p-6 flex flex-col justify-center">
+                    <h3 class="text-2xl font-bold mb-2 text-red-500">DOJ Politicization</h3>
+                    <p class="mt-2 text-gray-300">The plan calls for a "top-to-bottom overhaul" of the Department of Justice, eroding its independence to ensure litigation decisions are "consistent with the President’s agenda" and ending investigations deemed "contrary to...Administration policies."</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="iowa-testbed" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-white">The Iowa Testbed: A Timeline of Legal Weaponization</h2>
+            <p class="text-gray-400 text-center max-w-3xl mx-auto mb-8">The legal and political battle surrounding Sheriff Dan Marx exemplifies how state power can be used to enforce ideological conformity, providing a blueprint for national strategies.</p>
+            <div class="relative timeline py-8">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="bg-gray-800 rounded-lg shadow-lg p-6">
+                        <time class="font-semibold text-red-500">Feb 4, 2025</time>
+                        <h3 class="text-lg font-bold mt-1 text-white">Sheriff Marx's Post</h3>
+                        <p class="text-gray-400 mt-2">Sheriff Dan Marx states on Facebook his office will only honor ICE detainers with a judicial warrant, citing constitutional concerns.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="bg-gray-800 rounded-lg shadow-lg p-6">
+                        <time class="font-semibold text-red-500">Feb 6, 2025</time>
+                        <h3 class="text-lg font-bold mt-1 text-white">Governor's Complaint</h3>
+                        <p class="text-gray-400 mt-2">Governor Kim Reynolds files a formal complaint with the Attorney General, accusing Marx of violating state law and threatening to withhold county funding.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="bg-gray-800 rounded-lg shadow-lg p-6">
+                        <time class="font-semibold text-red-500">Mar 27, 2025</time>
+                        <h3 class="text-lg font-bold mt-1 text-white">Attorney General Sues</h3>
+                        <p class="text-gray-400 mt-2">Despite finding Marx's office compliant with all ICE requests, AG Brenna Bird sues the Sheriff, focusing on the "discouraging" language of his post.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="bg-gray-800 rounded-lg shadow-lg p-6">
+                        <time class="font-semibold text-red-500">Ongoing</time>
+                        <h3 class="text-lg font-bold mt-1 text-white">The Chilling Effect</h3>
+                        <p class="text-gray-400 mt-2">The case serves as a warning to other officials, demonstrating the use of legal and financial power to punish dissent and compel ideological alignment.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="electoral-battlefield" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-white">The Electoral Battlefield</h2>
+            <p class="text-gray-400 text-center max-w-3xl mx-auto mb-8">The alliance deploys a multi-pronged electoral strategy, combining grassroots mobilization with legal and technological tactics to shape the electorate and influence outcomes.</p>
+            <div class="bg-gray-800 rounded-lg shadow-lg p-6 md:p-8">
+                 <h3 class="text-2xl font-bold mb-4 text-center text-white">Electoral Operation Focus</h3>
+                <div class="chart-container h-96">
+                     <canvas id="electoralOpsChart"></canvas>
+                </div>
+                <p class="text-sm text-gray-500 mt-4 text-center">This chart illustrates the focus of key electoral operations: "Steeplechase" on grassroots mobilization, "Watchtower" on cultural messaging, and "Checkmate" on voter challenges and roll purges.</p>
+            </div>
+        </section>
+        
+        <section id="technological-enablers" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-white">Technological Enablers</h2>
+            <p class="text-gray-400 text-center max-w-3xl mx-auto mb-8">Advanced technology provides the tools for mass surveillance, data integration, and electoral challenges, creating a "chilling effect" on civic life.</p>
+            <div class="bg-gray-800 rounded-lg shadow-lg p-6 md:p-8">
+                <h3 class="text-xl font-bold mb-4 text-center text-white">Surveillance and Data Analysis Market Share</h3>
+                <div class="chart-container h-80">
+                    <canvas id="techProviderChart"></canvas>
+                </div>
+                <p class="text-sm text-gray-500 mt-4 text-center">Palantir holds significant government contracts for data analysis, including its "ImmigrationOS" for ICE, enabling mass data integration. Meanwhile, tools like EagleAI are used for mass voter challenges, disrupting elections under the guise of "integrity."</p>
+            </div>
+        </section>
+
+        <footer class="text-center mt-16 py-8 border-t border-gray-700">
+            <p class="text-gray-400">This infographic is based on a systemic analysis of publicly available documents, financial records, and investigative reporting.</p>
+            <p class="text-xs text-gray-600 mt-2">Generated by Canvas Infographics. No SVG or Mermaid JS was used in this output.</p>
+        </footer>
+    </div>
+
+    <script>
+        const substackTheme = {
+            red: '#DC2626',
+            lightRed: '#F87171',
+            darkRed: '#991B1B',
+            text: '#E5E7EB',
+            gray: '#4B5563',
+            darkGray: '#1F2937'
+        };
+
+        const chartTooltipConfig = {
+            plugins: {
+                tooltip: {
+                    backgroundColor: 'rgba(17, 24, 39, 0.8)',
+                    titleColor: substackTheme.text,
+                    bodyColor: substackTheme.text,
+                    borderColor: substackTheme.red,
+                    borderWidth: 1,
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                                return label.join(' ');
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        };
+
+        Chart.defaults.color = substackTheme.text;
+        Chart.defaults.borderColor = substackTheme.gray;
+        
+        function wrapLabel(str, maxWidth) {
+            if (str.length <= maxWidth) {
+                return str;
+            }
+            const words = str.split(' ');
+            let lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if (currentLine.length + words[i].length + 1 < maxWidth) {
+                    currentLine += ' ' + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabMachinery = document.getElementById('tab-machinery');
+            const tabEngine = document.getElementById('tab-engine');
+            const contentMachinery = document.getElementById('content-machinery');
+            const contentEngine = document.getElementById('content-engine');
+
+            tabMachinery.classList.add('active');
+
+            tabMachinery.addEventListener('click', () => {
+                contentMachinery.classList.remove('hidden');
+                contentEngine.classList.add('hidden');
+                tabMachinery.classList.add('active');
+                tabEngine.classList.remove('active');
+            });
+
+            tabEngine.addEventListener('click', () => {
+                contentEngine.classList.remove('hidden');
+                contentMachinery.classList.add('hidden');
+                tabEngine.classList.add('active');
+                tabMachinery.classList.remove('active');
+            });
+
+            const fundingFlowCtx = document.getElementById('fundingFlowChart').getContext('2d');
+            new Chart(fundingFlowCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Marble Freedom Trust', 'The 85 Fund', 'Donors Trust'],
+                    datasets: [{
+                        label: 'Grants to Policy Groups (e.g., Heritage)',
+                        data: [50, 2, 2.6],
+                        backgroundColor: substackTheme.red,
+                    }, {
+                        label: 'Grants to Legal/Activist Groups (e.g., ADF)',
+                        data: [18, 1.3, 1.1],
+                        backgroundColor: substackTheme.lightRed,
+                    }, {
+                        label: 'Grants to other DAFs/Funds',
+                        data: [153.8, 92, 0],
+                        backgroundColor: substackTheme.gray,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { stacked: true, grid: { color: substackTheme.gray } },
+                        y: { 
+                            stacked: true, 
+                            grid: { color: substackTheme.gray },
+                            title: { display: true, text: 'Grants Made (in Millions USD)' }
+                        }
+                    },
+                    plugins: {
+                         ...chartTooltipConfig.plugins,
+                        title: { display: true, text: 'Illustrative DAF Grant Distribution', font: { size: 16 } },
+                        subtitle: { display: true, text: 'Shows how major funding entities distribute resources.' }
+                    }
+                }
+            });
+
+            const sevenMountainsCtx = document.getElementById('sevenMountainsChart').getContext('2d');
+            new Chart(sevenMountainsCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Government', 'Education', 'Media', 'Religion', 'Family', 'Business', ['Arts &', 'Entertainment']],
+                    datasets: [{
+                        label: 'Spheres of Influence',
+                        data: [1, 1, 1, 1, 1, 1, 1],
+                        backgroundColor: [ substackTheme.red, substackTheme.lightRed, substackTheme.darkRed, '#9ca3af', '#6b7280', '#4b5563', '#374151' ],
+                        borderColor: substackTheme.darkGray,
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        ...chartTooltipConfig.plugins,
+                        legend: { position: 'bottom' },
+                        title: { display: false }
+                    }
+                }
+            });
+
+            const electoralOpsCtx = document.getElementById('electoralOpsChart').getContext('2d');
+            new Chart(electoralOpsCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Mobilization (GOTV)', 'Messaging (Culture War)', 'Legal Challenges', 'Voter Suppression', 'Disinformation'],
+                    datasets: [{
+                        label: 'Steeplechase',
+                        data: [9, 7, 3, 2, 4],
+                        fill: true,
+                        backgroundColor: 'rgba(220, 38, 38, 0.2)',
+                        borderColor: substackTheme.red,
+                        pointBackgroundColor: substackTheme.red,
+                    }, {
+                        label: 'Checkmate',
+                        data: [2, 3, 9, 8, 6],
+                        fill: true,
+                        backgroundColor: 'rgba(153, 27, 27, 0.2)',
+                        borderColor: substackTheme.darkRed,
+                        pointBackgroundColor: substackTheme.darkRed,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: substackTheme.gray },
+                            grid: { color: substackTheme.gray },
+                            pointLabels: { font: { size: 12 } },
+                            ticks: { backdropColor: substackTheme.darkGray, color: substackTheme.text }
+                        }
+                    },
+                    plugins: {
+                         ...chartTooltipConfig.plugins,
+                    }
+                }
+            });
+            
+            const techProviderCtx = document.getElementById('techProviderChart').getContext('2d');
+            const techLabels = ['Palantir (Gov Surveillance)', 'EagleAI (Voter Challenges)', 'Other Data Analytics Firms'].map(label => wrapLabel(label, 16));
+            new Chart(techProviderCtx, {
+                type: 'pie',
+                data: {
+                    labels: techLabels,
+                    datasets: [{
+                        label: 'Market Share in Movement-Adjacent Tech',
+                        data: [65, 15, 20],
+                        backgroundColor: [ substackTheme.red, substackTheme.darkRed, substackTheme.gray ],
+                        borderColor: substackTheme.darkGray,
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                     plugins: {
+                        ...chartTooltipConfig.plugins,
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        });
+
+    </script>
+
+</body>
+</html>
