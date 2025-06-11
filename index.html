@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;700&family=Teko:wght@400;600;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Dark Mode with Red Accents, inspired by exposed1.substack.com -->
-    <!-- Application Structure Plan: The SPA is structured as a thematic, scrollable dossier. A sticky navigation bar allows users to jump to key pillars of the investigation. This non-linear structure lets users explore the complex, interconnected system at their own pace. Interactive elements like clickable nodes for information pop-ups, tabbed content, and dynamic charts are used to manage information density and encourage deep exploration of the evidence. -->
+    <!-- Application Structure Plan: The SPA is structured as a thematic, scrollable dossier. This non-linear structure lets users explore the complex, interconnected system at their own pace. Interactive elements like clickable nodes for information pop-ups, tabbed content, and dynamic charts are used to manage information density and encourage deep exploration of the evidence. -->
     <!-- Visualization & Content Choices: Goal: Organize/Relationships -> Viz: Enhanced HTML/CSS flowcharts and network diagrams with clickable nodes that trigger modal pop-ups for detailed information. This method is chosen to visually map the complex, non-linear relationships between actors, finances, and institutions, directly responding to the EIC's desire for a "Systemic Network Analysis." NO SVG/Mermaid. Goal: Inform/Compare -> Viz: Chart.js Donut and Bar charts present key statistics (polling data, voter challenges) in an easily digestible format. Rendered to Canvas. Goal: Organize/Inform -> Viz: "Big Number" cards and tabbed content areas break down the dense information of Project 2025 and its tactics into interactive, manageable chunks. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
@@ -25,35 +25,21 @@
         .node { border: 1px solid #4A5568; padding: 1rem; text-align: center; border-radius: 0.5rem; background-color: #2D3748; transition: all 0.3s ease; cursor: pointer; position: relative; z-index: 10; }
         .node:hover { transform: translateY(-5px); box-shadow: 0 4px 8px rgba(0,0,0,0.5); border-color: var(--accent-red); }
         .line { position: absolute; background-color: #4A5568; z-index: 1; }
-        .sticky-nav { position: sticky; top: 0; z-index: 50; background-color: rgba(18, 18, 18, 0.8); backdrop-filter: blur(10px); }
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.75); z-index: 100; display: flex; align-items: center; justify-content: center; }
-        .modal-content { background-color: #1E1E1E; border: 1px solid var(--accent-red); max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; }
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.75); z-index: 100; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease; }
+        .modal-overlay.visible { opacity: 1; visibility: visible; }
+        .modal-content { background-color: #1E1E1E; border: 1px solid var(--accent-red); max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; transform: scale(0.95); transition: transform 0.3s ease; }
+        .modal-overlay.visible .modal-content { transform: scale(1); }
     </style>
 </head>
 <body class="antialiased">
-
-    <nav id="navbar" class="sticky-nav shadow-lg border-b border-gray-800">
-        <div class="container mx-auto px-4">
-            <div class="flex items-center justify-between h-16">
-                <h1 class="text-3xl uppercase text-white">The Pincer Movement</h1>
-                <div class="hidden md:flex space-x-6 text-lg uppercase">
-                    <a href="#alliance" class="nav-item text-gray-300 hover:text-accent-red transition duration-300">The Alliance</a>
-                    <a href="#ideology" class="nav-item text-gray-300 hover:text-accent-red transition duration-300">The Ideology</a>
-                    <a href="#blueprint" class="nav-item text-gray-300 hover:text-accent-red transition duration-300">The Blueprint</a>
-                    <a href="#money" class="nav-item text-gray-300 hover:text-accent-red transition duration-300">The Money</a>
-                    <a href="#tactics" class="nav-item text-gray-300 hover:text-accent-red transition duration-300">The Tactics</a>
-                </div>
-            </div>
-        </div>
-    </nav>
 
     <main class="container mx-auto p-4 md:p-8">
 
         <header class="text-center my-12 md:my-20">
             <h1 class="text-6xl md:text-8xl font-bold uppercase tracking-wider text-white">The Pincer Movement</h1>
-            <h2 class="text-2xl md:text-4xl mt-2 accent-red uppercase tracking-wide">An Architecture of Autocracy</h2>
+            <h2 class="text-2xl md:text-4xl mt-2 accent-red uppercase tracking-wide">An Interactive Dossier</h2>
             <p class="max-w-3xl mx-auto mt-6 text-lg text-gray-400">
-                This investigation exposes a deeply integrated, two-pronged assault on the foundations of American pluralism and democratic governance. It is not a story of two separate movements, but a forensic analysis of a coordinated campaign to reshape the United States from both within and without its institutions of power.
+                This interactive dossier exposes a deeply integrated, two-pronged assault on the foundations of American pluralism and democratic governance. It is not a story of two separate movements, but a forensic analysis of a coordinated campaign to reshape the United States from both within and without its institutions of power.
             </p>
         </header>
 
@@ -64,30 +50,58 @@
                  <p class="text-lg mb-8 leading-relaxed text-center">
                     The Pincer Movement is defined by the symbiotic relationship between its ideological and bureaucratic arms, connected by key personnel who operate across multiple organizations. This is not a loose coalition but a tightly integrated network. <span class="font-bold accent-red">Click on any node below to explore the connections.</span>
                 </p>
-                <div class="relative h-[600px] md:h-[400px]">
-                    <!-- Lines -->
-                    <div class="line" style="left: 25%; top: 25%; width: 50%; height: 2px;"></div>
-                    <div class="line" style="left: 25%; top: 25%; width: 2px; height: 50%;"></div>
-                    <div class="line" style="left: 75%; top: 25%; width: 2px; height: 50%;"></div>
-
-                    <!-- Nodes -->
-                    <div id="node-leo" class="node absolute w-48" style="left: calc(50% - 6rem); top: 0;">
-                        <h4 class="text-xl">Leonard Leo</h4><p class="text-sm text-gray-400">The Architect</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                    <div id="node-leo" class="node group">
+                        <h4 class="text-2xl">Leonard Leo</h4>
+                        <p class="text-sm text-gray-400">The Architect</p>
+                        <p class="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm italic">Strategic mastermind connecting money to judicial and political power.</p>
                     </div>
-                    <div id="node-vought" class="node absolute w-48" style="left: 0; top: calc(50% - 3rem);">
-                        <h4 class="text-xl">Russell Vought</h4><p class="text-sm text-gray-400">The Bureaucrat</p>
+                     <div id="node-vought" class="node group">
+                        <h4 class="text-2xl">Russell Vought</h4>
+                        <p class="text-sm text-gray-400">The Bureaucrat</p>
+                         <p class="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm italic">Project 2025 author aiming to dismantle the civil service from within.</p>
                     </div>
-                    <div id="node-vanderplaats" class="node absolute w-48" style="right: 0; top: calc(50% - 3rem);">
-                        <h4 class="text-xl">Bob Vander Plaats</h4><p class="text-sm text-gray-400">The Mobilizer</p>
-                    </div>
-                    <div id="node-heritage" class="node absolute w-48" style="left: calc(25% - 6rem); bottom: 0;">
-                        <h4 class="text-xl">Project 2025</h4><p class="text-sm text-gray-400">(The Heritage Foundation)</p>
-                    </div>
-                    <div id="node-tfl" class="node absolute w-48" style="right: calc(25% - 6rem); bottom: 0;">
-                         <h4 class="text-xl">The Family Leader</h4><p class="text-sm text-gray-400">(Christian Nationalism)</p>
+                     <div id="node-vanderplaats" class="node group">
+                        <h4 class="text-2xl">Bob Vander Plaats</h4>
+                        <p class="text-sm text-gray-400">The Mobilizer</p>
+                         <p class="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm italic">Grassroots general translating ideology into state-level political action.</p>
                     </div>
                 </div>
             </div>
+        </section>
+        
+        <section id="blueprint" class="py-16">
+            <h2 class="text-5xl text-center mb-4">The Blueprint</h2>
+            <h3 class="text-2xl text-center accent-red mb-12 uppercase">Project 2025's Mandate</h3>
+             <p class="max-w-4xl mx-auto text-center text-lg text-gray-400 mb-12">
+                Project 2025 is a 920-page operational blueprint to consolidate executive power by purging the civil service and politicizing the Department of Justice. The proposed restructuring represents a fundamental threat to the independence of federal law enforcement.
+            </p>
+             <div class="card p-8">
+                 <h4 class="text-3xl mb-6 text-center">Visualizing the Threat: DOJ Structure</h4>
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                     <div class="border-2 border-gray-600 rounded-lg p-4">
+                        <h5 class="text-xl text-center mb-4 text-gray-400">Current Structure</h5>
+                        <div class="space-y-4 text-center">
+                            <div class="node bg-gray-700">The President</div>
+                            <div class="text-2xl">&darr;</div>
+                            <div class="node bg-gray-700">Attorney General (Independent)</div>
+                            <div class="text-2xl">&darr;</div>
+                            <div class="node bg-gray-700">Non-Partisan DOJ Civil Servants</div>
+                        </div>
+                     </div>
+                     <div class="border-2 border-accent-red rounded-lg p-4">
+                        <h5 class="text-xl text-center mb-4 accent-red">Project 2025 Proposed Structure</h5>
+                         <div class="space-y-4 text-center">
+                            <div class="node bg-red-900/50">The President</div>
+                            <div class="text-2xl accent-red">&darr;</div>
+                            <div class="node bg-red-900/50">Attorney General (Politically Aligned)</div>
+                            <div class="text-2xl accent-red">&darr;</div>
+                            <div class="node bg-red-900/50">Vetted Political Appointees</div>
+                        </div>
+                     </div>
+                 </div>
+                 <p class="text-center mt-6 text-gray-500 text-sm">This diagram illustrates the proposed shift from an independent DOJ to one directly subservient to the President's political agenda.</p>
+             </div>
         </section>
 
         <section id="ideology" class="py-16">
@@ -108,24 +122,6 @@
                     <div class="chart-container">
                         <canvas id="ideologyChart"></canvas>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="blueprint" class="py-16">
-            <h2 class="text-5xl text-center mb-4">The Blueprint</h2>
-            <h3 class="text-2xl text-center accent-red mb-12 uppercase">Project 2025's Mandate</h3>
-             <p class="max-w-4xl mx-auto text-center text-lg text-gray-400 mb-12">
-                Project 2025 is a 920-page operational blueprint for a radical restructuring of the federal government. It's a detailed plan to consolidate executive power by purging the civil service and politicizing the Department of Justice.
-            </p>
-             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="card p-8">
-                    <h4 class="text-3xl mb-4">Mechanism 1: Schedule F</h4>
-                    <p class="leading-relaxed">A plan to reclassify up to **50,000** federal employees, stripping their job protections. This allows them to be fired and replaced with individuals vetted for ideological loyalty, creating a subservient workforce.</p>
-                </div>
-                 <div class="card p-8">
-                    <h4 class="text-3xl mb-4">Mechanism 2: DOJ Capture</h4>
-                    <p class="leading-relaxed">A "top-to-bottom overhaul" of the Department of Justice to ensure litigation and investigations are "consistent with the President’s agenda," effectively turning the DOJ into a political weapon.</p>
                 </div>
             </div>
         </section>
@@ -173,9 +169,8 @@
                  </div>
              </div>
         </section>
-
     </main>
-    
+
     <div id="modal" class="modal-overlay hidden">
         <div class="modal-content rounded-lg shadow-xl p-6 relative">
             <button id="closeModal" class="absolute top-2 right-4 text-3xl text-gray-500 hover:text-white">&times;</button>
@@ -183,8 +178,7 @@
         </div>
     </div>
 
-
-    <footer class="border-t border-gray-800 py-8">
+    <footer class="border-t border-gray-800 py-8 mt-16">
         <div class="container mx-auto px-4 text-center text-gray-500">
             <p>&copy; 2025 Reclaiming Democracy's Promise. All Rights Reserved.</p>
             <p class="text-sm mt-2">This interactive dossier is based on the keystone report "THE PINCER MOVEMENT: An Architecture of Autocracy."</p>
@@ -222,15 +216,15 @@
                     const data = modalData[node.id];
                     if (data) {
                         modalBody.innerHTML = `<h3 class="text-3xl mb-4 accent-red">${data.title}</h3><div class="text-gray-300 leading-relaxed">${data.content}</div>`;
-                        modal.classList.remove('hidden');
+                        modal.classList.add('visible');
                     }
                 });
             });
 
-            closeModal.addEventListener('click', () => modal.classList.add('hidden'));
+            closeModal.addEventListener('click', () => modal.classList.remove('visible'));
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
-                    modal.classList.add('hidden');
+                    modal.classList.remove('visible');
                 }
             });
 
@@ -326,12 +320,6 @@
             
             setActiveTab('steeplechase');
             
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
-                });
-            });
         });
     </script>
 </body>
