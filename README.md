@@ -36,8 +36,6 @@ This project is hosted live via GitHub Pages. You can view and interact with the
 
 **https://greenmovelow.github.io/pincer-movement-interactive/**
 
-_(You will need to replace `your-username` and `your-repository-name` with your actual GitHub details after deploying.)_
-
 ## Connection to the Investigation
 
 This visualization serves as a companion piece to a deep-dive meta-journalistic investigation into the systemic threats facing American democracy. You can read the full story and analysis at:
