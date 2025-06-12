@@ -82,21 +82,21 @@
                      <div class="border-2 border-gray-600 rounded-lg p-4">
                         <h5 class="text-xl text-center mb-4 text-gray-400">Current Structure</h5>
                         <div class="space-y-4 text-center">
-                            <div class="node bg-gray-700">The President</div>
-                            <div class="text-2xl">&darr;</div>
-                            <div class="node bg-gray-700">Attorney General (Independent)</div>
-                            <div class="text-2xl">&darr;</div>
-                            <div class="node bg-gray-700">Non-Partisan DOJ Civil Servants</div>
+                            <div class="node bg-gray-700 cursor-default">The President</div>
+                            <div class="text-2xl">↓</div>
+                            <div class="node bg-gray-700 cursor-default">Attorney General (Independent)</div>
+                            <div class="text-2xl">↓</div>
+                            <div class="node bg-gray-700 cursor-default">Non-Partisan DOJ Civil Servants</div>
                         </div>
                      </div>
                      <div class="border-2 border-accent-red rounded-lg p-4">
                         <h5 class="text-xl text-center mb-4 accent-red">Project 2025 Proposed Structure</h5>
                          <div class="space-y-4 text-center">
-                            <div class="node bg-red-900/50">The President</div>
-                            <div class="text-2xl accent-red">&darr;</div>
-                            <div class="node bg-red-900/50">Attorney General (Politically Aligned)</div>
-                            <div class="text-2xl accent-red">&darr;</div>
-                            <div class="node bg-red-900/50">Vetted Political Appointees</div>
+                            <div class="node bg-red-900/50 cursor-default">The President</div>
+                            <div class="text-2xl accent-red">↓</div>
+                            <div class="node bg-red-900/50 cursor-default">Attorney General (Politically Aligned)</div>
+                            <div class="text-2xl accent-red">↓</div>
+                            <div class="node bg-red-900/50 cursor-default">Vetted Political Appointees</div>
                         </div>
                      </div>
                  </div>
@@ -113,7 +113,7 @@
                     <p class="mb-6 leading-relaxed">The ideological fuel for the movement is the Seven Mountains Mandate (7MM), a dominionist doctrine positing that Christians are divinely ordained to achieve control over the seven key spheres of societal influence.</p>
                     <div class="text-lg italic border-l-4 border-accent-red pl-4 text-gray-300">
                         "This isn't a political rally... It's where the people of God, the citizens of heaven, bring heaven to earth."
-                        <span class="block text-right mt-2 not-italic text-gray-500">&mdash; Lance Wallnau, NPR Interview</span>
+                        <span class="block text-right mt-2 not-italic text-gray-500">— Lance Wallnau, NPR Interview</span>
                     </div>
                 </div>
                 <div class="card p-8 md:col-span-2">
@@ -142,7 +142,7 @@
                         <div id="node-mft" class="node inline-block bg-gray-900 border-accent-red"><h4 class="text-xl">Marble Freedom Trust</h4><p>(Chaired by Leonard Leo)</p></div>
                     </div>
                      <div class="w-full flex justify-center my-4"><div class="w-px bg-gray-700 h-16"></div></div>
-                    <div class="text-center"><div class="text-3xl">&darr;</div></div>
+                    <div class="text-center"><div class="text-3xl">↓</div></div>
                     <div class="flex flex-col md:flex-row justify-around">
                         <div id="node-donors" class="node w-full md:w-2/5 mb-4 md:mb-0">
                             <h4 class="text-xl">DonorsTrust</h4><p>"Dark Money ATM"</p>
@@ -173,14 +173,14 @@
 
     <div id="modal" class="modal-overlay hidden">
         <div class="modal-content rounded-lg shadow-xl p-6 relative">
-            <button id="closeModal" class="absolute top-2 right-4 text-3xl text-gray-500 hover:text-white">&times;</button>
+            <button id="closeModal" class="absolute top-2 right-4 text-3xl text-gray-500 hover:text-white">×</button>
             <div id="modal-body"></div>
         </div>
     </div>
 
     <footer class="border-t border-gray-800 py-8 mt-16">
         <div class="container mx-auto px-4 text-center text-gray-500">
-            <p>&copy; 2025 Reclaiming Democracy's Promise. All Rights Reserved.</p>
+            <p>© 2025 Reclaiming Democracy's Promise. All Rights Reserved.</p>
             <p class="text-sm mt-2">This interactive dossier is based on the keystone report "THE PINCER MOVEMENT: An Architecture of Autocracy."</p>
         </div>
     </footer>
@@ -192,8 +192,6 @@
                 'node-leo': { title: 'Leonard Leo: The Architect', content: '<p>A key conservative legal strategist. Chairs the Marble Freedom Trust and is a central figure in The 85 Fund and the Federalist Society. Orchestrates funding and judicial strategy for the conservative movement.</p>' },
                 'node-vought': { title: 'Russell Vought: The Bureaucrat', content: '<p>Former OMB Director and a lead author of Project 2025. A self-described "Christian Nation-ist" who advocates for dismantling the administrative state and using government power to enforce ideological goals.</p>' },
                 'node-vanderplaats': { title: 'Bob Vander Plaats: The Mobilizer', content: '<p>President & CEO of The Family Leader, an influential Christian Nationalist group in Iowa. Expert at grassroots mobilization and translating theological goals into state-level policy and political pressure.</p>' },
-                'node-heritage': { title: 'Project 2025 (The Heritage Foundation)', content: '<p>A 920-page blueprint for a radical overhaul of the federal government. Its "Mandate for Leadership" details plans for purging the civil service (Schedule F) and politicizing the Department of Justice.</p>' },
-                'node-tfl': { title: 'The Family Leader', content: '<p>A Christian Nationalist organization that seeks to embed "biblical values" into government. Instrumental in passing legislation like SF 418 in Iowa and mobilizing a conservative religious voting bloc.</p>' },
                 'node-seid': { title: 'Barre Seid: The Megadonor', content: '<p>Donated his $1.6 billion electronics company, Tripp Lite, to the Marble Freedom Trust in 2021. This transaction is likely the largest single political donation in U.S. history, creating a massive financial engine for the conservative movement.</p>'},
                 'node-mft': { title: 'Marble Freedom Trust', content: '<p>Chaired by Leonard Leo, this trust received the $1.6B contribution from Barre Seid. It acts as a central financial hub, granting tens of millions to other conservative DAFs and organizations to "crush liberal dominance."</p>'},
                 'node-donors': { title: 'DonorsTrust', content: '<p>A major Donor-Advised Fund (DAF) often called the "dark money ATM of the political right." It receives funds from entities like MFT and channels them to a vast network of conservative groups, including The Heritage Foundation and the Alliance Defending Freedom, often obscuring the original donors.</p>'},
@@ -324,3 +322,5 @@
     </script>
 </body>
 </html>
+
+
