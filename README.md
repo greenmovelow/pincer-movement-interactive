@@ -40,4 +40,4 @@ This project is hosted live via GitHub Pages. You can view and interact with the
 
 This visualization serves as a companion piece to a deep-dive meta-journalistic investigation into the systemic threats facing American democracy. You can read the full story and analysis at:
 
-**[Reclaiming Democracy's Promise on Substack](https://exposed1.substack.com)**
+**[Restoring Democracy's Promise on Substack](https://exposed1.substack.com)**
