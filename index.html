@@ -9,25 +9,156 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;700&family=Teko:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Dark Mode with Red Accents, inspired by exposed1.substack.com -->
-    <!-- Application Structure Plan: The SPA is structured as a thematic, scrollable dossier. A sticky navigation bar allows users to jump to key pillars of the investigation. This non-linear structure lets users explore the complex, interconnected system at their own pace. Interactive elements like clickable nodes for information pop-ups, tabbed content, and dynamic charts are used to manage information density and encourage deep exploration of the evidence. -->
-    <!-- Visualization & Content Choices: Goal: Organize/Relationships -> Viz: Enhanced HTML/CSS flowcharts and network diagrams with clickable nodes that trigger modal pop-ups for detailed information. This method is chosen to visually map the complex, non-linear relationships between actors, finances, and institutions, directly responding to the EIC's desire for a "Systemic Network Analysis." NO SVG/Mermaid. Goal: Inform/Compare -> Viz: Chart.js Donut and Bar charts present key statistics (polling data, voter challenges) in an easily digestible format. Rendered to Canvas. Goal: Organize/Inform -> Viz: "Big Number" cards and tabbed content areas break down the dense information of Project 2025 and its tactics into interactive, manageable chunks. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    
+    <!-- Design and Implementation Notes -->
+    <!-- Palette: Dark Mode with Red Accents, inspired by exposed1.substack.com -->
+    <!-- Structure: SPA structured as a thematic, scrollable dossier with sticky navigation. -->
+    <!-- Visualizations: HTML/CSS flowcharts, Chart.js canvases, and an interactive timeline. Clickable nodes and timeline events trigger a unified modal system. -->
+    <!-- CONFIRMATION: NO SVG/Mermaid graphics are used. -->
+
     <style>
-        :root { --accent-red: #E53E3E; }
-        body { font-family: 'Roboto Slab', serif; background-color: #121212; color: #E0E0E0; }
-        h1, h2, h3, .nav-item { font-family: 'Teko', sans-serif; font-weight: 600; }
+        :root { 
+            --accent-red: #E53E3E; 
+            --background-primary: #121212;
+            --background-secondary: #1E1E1E;
+            --border-color: #333;
+            --text-primary: #E0E0E0;
+            --text-secondary: #A0A0A0;
+            --font-display: 'Teko', sans-serif;
+            --font-body: 'Roboto Slab', serif;
+        }
+        body { 
+            font-family: var(--font-body); 
+            background-color: var(--background-primary); 
+            color: var(--text-primary); 
+        }
+        h1, h2, h3, .nav-item { 
+            font-family: var(--font-display); 
+            font-weight: 600; 
+        }
         .accent-red { color: var(--accent-red); }
-        .card { background-color: #1E1E1E; border: 1px solid #333; transition: all 0.3s ease-in-out; }
-        .card:hover { border-color: var(--accent-red); box-shadow: 0 0 15px rgba(229, 62, 62, 0.2); }
-        .chart-container { position: relative; width: 100%; max-width: 500px; margin-left: auto; margin-right: auto; height: 300px; max-height: 400px; }
+        .card { 
+            background-color: var(--background-secondary); 
+            border: 1px solid var(--border-color); 
+            transition: all 0.3s ease-in-out; 
+        }
+        .card:hover { 
+            border-color: var(--accent-red); 
+            box-shadow: 0 0 15px rgba(229, 62, 62, 0.2); 
+        }
+        .chart-container { 
+            position: relative; 
+            width: 100%; 
+            max-width: 500px; 
+            margin: auto; 
+            height: 300px; 
+            max-height: 400px; 
+        }
         @media (min-width: 768px) { .chart-container { height: 350px; } }
-        .node { border: 1px solid #4A5568; padding: 1rem; text-align: center; border-radius: 0.5rem; background-color: #2D3748; transition: all 0.3s ease; cursor: pointer; position: relative; z-index: 10; }
-        .node:hover { transform: translateY(-5px); box-shadow: 0 4px 8px rgba(0,0,0,0.5); border-color: var(--accent-red); }
+        .node { 
+            border: 1px solid #4A5568; 
+            padding: 1rem; 
+            text-align: center; 
+            border-radius: 0.5rem; 
+            background-color: #2D3748; 
+            transition: all 0.3s ease; 
+            cursor: pointer; 
+            position: relative; 
+            z-index: 10; 
+        }
+        .node:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5); 
+            border-color: var(--accent-red); 
+        }
         .line { position: absolute; background-color: #4A5568; z-index: 1; }
-        .sticky-nav { position: sticky; top: 0; z-index: 50; background-color: rgba(18, 18, 18, 0.8); backdrop-filter: blur(10px); }
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.75); z-index: 100; display: flex; align-items: center; justify-content: center; }
-        .modal-content { background-color: #1E1E1E; border: 1px solid var(--accent-red); max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; }
+        .sticky-nav { 
+            position: sticky; 
+            top: 0; 
+            z-index: 50; 
+            background-color: rgba(18, 18, 18, 0.8); 
+            backdrop-filter: blur(10px); 
+        }
+        .modal-overlay { 
+            position: fixed; 
+            top: 0; left: 0; right: 0; bottom: 0; 
+            background-color: rgba(0, 0, 0, 0.85); 
+            z-index: 100; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            backdrop-filter: blur(5px);
+        }
+        .modal-content { 
+            background-color: var(--background-secondary); 
+            border: 1px solid var(--accent-red); 
+            max-width: 550px; 
+            width: 90%; 
+            max-height: 90vh; 
+            overflow-y: auto; 
+        }
+        
+        /* --- START: Interactive Timeline Styles --- */
+        .timeline-container {
+            position: relative;
+            padding: 2rem 0;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background-color: var(--border-color);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+        }
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+        }
+        .timeline-item.left { left: 0; }
+        .timeline-item.right { left: 50%; }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -13px;
+            background-color: var(--background-primary);
+            border: 4px solid var(--accent-red);
+            top: 25px;
+            border-radius: 50%;
+            z-index: 1;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        .timeline-item.right::after { left: -12px; }
+        .timeline-item:hover::after {
+            transform: scale(1.2);
+            box-shadow: 0 0 10px var(--accent-red);
+        }
+        .timeline-content {
+            padding: 20px 30px;
+            background-color: #2D3748;
+            position: relative;
+            border-radius: 6px;
+            border: 1px solid #4A5568;
+        }
+        .timeline-item.left .timeline-content { text-align: right; }
+        @media screen and (max-width: 768px) {
+            .timeline-container::after { left: 31px; }
+            .timeline-item { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .timeline-item.right { left: 0%; }
+            .timeline-item.left::after, .timeline-item.right::after { left: 18px; }
+             .timeline-item.left .timeline-content { text-align: left; }
+        }
+        /* --- END: Interactive Timeline Styles --- */
+
     </style>
 </head>
 <body class="antialiased">
@@ -36,8 +167,10 @@
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between h-16">
                 <h1 class="text-3xl uppercase text-white">The Pincer Movement</h1>
+                <!-- Navigation updated to include Timeline -->
                 <div class="hidden md:flex space-x-6 text-lg uppercase">
                     <a href="#alliance" class="nav-item text-gray-300 hover:text-accent-red transition duration-300">The Alliance</a>
+                    <a href="#timeline" class="nav-item text-gray-300 hover:text-accent-red transition duration-300">The Timeline</a>
                     <a href="#ideology" class="nav-item text-gray-300 hover:text-accent-red transition duration-300">The Ideology</a>
                     <a href="#blueprint" class="nav-item text-gray-300 hover:text-accent-red transition duration-300">The Blueprint</a>
                     <a href="#money" class="nav-item text-gray-300 hover:text-accent-red transition duration-300">The Money</a>
@@ -89,6 +222,22 @@
                 </div>
             </div>
         </section>
+
+        <!-- --- START: Interactive Timeline Section --- -->
+        <section id="timeline" class="py-16">
+            <h2 class="text-5xl text-center mb-4">The Timeline of Convergence</h2>
+            <h3 class="text-2xl text-center accent-red mb-12 uppercase">How The Movement Was Built</h3>
+             <div class="card p-8">
+                <p class="text-lg mb-8 leading-relaxed text-center">
+                    This was not a spontaneous development. The Pincer Movement was assembled piece by piece over several years, with strategic funding preceding organizational and tactical rollouts. <span class="font-bold accent-red">Click any point on the timeline to see the details of each event.</span>
+                </p>
+                <div id="timeline-container" class="timeline-container">
+                    <!-- Timeline items will be dynamically injected here by JavaScript -->
+                </div>
+            </div>
+        </section>
+        <!-- --- END: Interactive Timeline Section --- -->
+
 
         <section id="ideology" class="py-16">
             <h2 class="text-5xl text-center mb-4">The Ideology</h2>
@@ -154,7 +303,7 @@
                          <div id="node-85fund" class="node w-full md:w-2/5">
                              <h4 class="text-xl">The 85 Fund</h4><p>HEP & Legal Groups</p>
                         </div>
-                     </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -162,16 +311,16 @@
         <section id="tactics" class="py-16">
             <h2 class="text-5xl text-center mb-4">The Tactics</h2>
             <h3 class="text-2xl text-center accent-red mb-12 uppercase">Shaping the Battlefield</h3>
-             <div class="card p-8">
+              <div class="card p-8">
                  <div id="tabs-container" class="mb-4 flex flex-wrap justify-center border-b border-gray-700">
                     <button data-tab="steeplechase" class="tab-button text-2xl px-6 py-3 border-b-2 border-transparent text-gray-400 hover:text-white">Steeplechase</button>
                     <button data-tab="watchtower" class="tab-button text-2xl px-6 py-3 border-b-2 border-transparent text-gray-400 hover:text-white">Watchtower</button>
                     <button data-tab="checkmate" class="tab-button text-2xl px-6 py-3 border-b-2 border-transparent text-gray-400 hover:text-white">Checkmate</button>
-                 </div>
+                </div>
                  <div id="tab-content" class="mt-6 text-lg leading-relaxed">
                     <!-- Tab content will be injected by JS -->
-                 </div>
-             </div>
+                </div>
+            </div>
         </section>
 
     </main>
@@ -193,8 +342,12 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Data for Modals and Charts
+            // --- START: Data Definitions ---
+
+            // Data for clickable network nodes and timeline events.
+            // Using a single modalData object for all pop-ups to centralize content.
             const modalData = {
+                // Network Nodes
                 'node-leo': { title: 'Leonard Leo: The Architect', content: '<p>A key conservative legal strategist. Chairs the Marble Freedom Trust and is a central figure in The 85 Fund and the Federalist Society. Orchestrates funding and judicial strategy for the conservative movement.</p>' },
                 'node-vought': { title: 'Russell Vought: The Bureaucrat', content: '<p>Former OMB Director and a lead author of Project 2025. A self-described "Christian Nation-ist" who advocates for dismantling the administrative state and using government power to enforce ideological goals.</p>' },
                 'node-vanderplaats': { title: 'Bob Vander Plaats: The Mobilizer', content: '<p>President & CEO of The Family Leader, an influential Christian Nationalist group in Iowa. Expert at grassroots mobilization and translating theological goals into state-level policy and political pressure.</p>' },
@@ -203,7 +356,15 @@
                 'node-seid': { title: 'Barre Seid: The Megadonor', content: '<p>Donated his $1.6 billion electronics company, Tripp Lite, to the Marble Freedom Trust in 2021. This transaction is likely the largest single political donation in U.S. history, creating a massive financial engine for the conservative movement.</p>'},
                 'node-mft': { title: 'Marble Freedom Trust', content: '<p>Chaired by Leonard Leo, this trust received the $1.6B contribution from Barre Seid. It acts as a central financial hub, granting tens of millions to other conservative DAFs and organizations to "crush liberal dominance."</p>'},
                 'node-donors': { title: 'DonorsTrust', content: '<p>A major Donor-Advised Fund (DAF) often called the "dark money ATM of the political right." It receives funds from entities like MFT and channels them to a vast network of conservative groups, including The Heritage Foundation and the Alliance Defending Freedom, often obscuring the original donors.</p>'},
-                'node-85fund': { title: 'The 85 Fund', content: '<p>Another DAF closely linked to Leonard Leo. It operates the Honest Elections Project (HEP), which is on Project 2025\'s advisory board. The 85 Fund engages in circular funding, both receiving money from and giving money to DonorsTrust, complicating financial tracking.</p>'}
+                'node-85fund': { title: 'The 85 Fund', content: '<p>Another DAF closely linked to Leonard Leo. It operates the Honest Elections Project (HEP), which is on Project 2025\'s advisory board. The 85 Fund engages in circular funding, both receiving money from and giving money to DonorsTrust, complicating financial tracking.</p>'},
+                
+                // Timeline Events
+                'timeline-1': { title: 'Q2 2021: The Seid Donation', content: '<p>Industrialist Barre Seid donates his entire $1.6 billion electronics company to the newly formed Marble Freedom Trust. This single transaction creates an unprecedented "dark money" war chest for the conservative movement, with Leonard Leo at the helm.</p><p class="mt-2 text-sm text-gray-400"><b>Key Actors:</b> Barre Seid, Leonard Leo</p>' },
+                'timeline-2': { title: 'Q1 2022: Project 2025 Launched', content: '<p>The Heritage Foundation formally launches the "Project 2025" coalition. Work begins on the "Mandate for Leadership," a comprehensive blueprint to restructure the federal government and staff it with ideologically vetted loyalists.</p><p class="mt-2 text-sm text-gray-400"><b>Key Actors:</b> The Heritage Foundation</p>' },
+                'timeline-3': { title: 'Q4 2022: MFT Initial Dispersal', content: '<p>The Marble Freedom Trust makes its first major grants, funneling tens of millions of dollars into key Donor-Advised Funds like DonorsTrust and The 85 Fund. This initiates the flow of capital to dozens of conservative legal and advocacy groups.</p><p class="mt-2 text-sm text-gray-400"><b>Key Actors:</b> MFT, DonorsTrust, 85 Fund</p>' },
+                'timeline-4': { title: 'Q2 2023: HEP Voter Challenges Begin', content: '<p>The Honest Elections Project (HEP), an arm of The 85 Fund, begins funding and promoting mass voter registration challenges in key states. This lays the legal and operational groundwork for future election interference tactics.</p><p class="mt-2 text-sm text-gray-400"><b>Key Actors:</b> Honest Elections Project</p>' },
+                'timeline-5': { title: 'Q1 2024: "Mandate for Leadership" Published', content: '<p>Project 2025 releases its 920-page playbook. It details the plan to implement Schedule F to fire up to 50,000 civil servants, dismantle administrative agencies, and seize control of the Department of Justice.</p><p class="mt-2 text-sm text-gray-400"><b>Key Actors:</b> Project 2025, Russell Vought</p>' },
+                'timeline-6': { title: 'Q1 2025: The "Pincer" Converges', content: '<p>The parallel tracks—bureaucratic deconstruction (Project 2025) and electoral disruption (HEP, EagleAI), fueled by the same dark money network (MFT)—are now fully mature and aimed at the same goal: reshaping American democracy.</p><p class="mt-2 text-sm text-gray-400"><b>Key Actors:</b> All</p>' }
             };
 
             const tabContentData = {
@@ -212,35 +373,78 @@
                 'checkmate': { title: 'Purging the Opposition', content: '<p class="mb-6">This involves strategies to fund and deploy tools for mass voter challenges. Software like EagleAI is used to flag registrations, which are then passed to activists for challenges, aiming to disenfranchise voters. Court findings have described the data used as "utterly lacking reliability," yet the tactic persists, funded by the same dark money network.</p><div class="chart-container"><canvas id="tacticsChart"></canvas></div>'}
             };
 
-            // Modal Logic
+            const timelineEvents = [
+                { id: 'timeline-1', date: 'Q2 2021', title: 'The Seid Donation', align: 'left' },
+                { id: 'timeline-2', date: 'Q1 2022', title: 'Project 2025 Launched', align: 'right' },
+                { id: 'timeline-3', date: 'Q4 2022', title: 'MFT Dispersal', align: 'left' },
+                { id: 'timeline-4', date: 'Q2 2023', title: 'Voter Challenges Begin', align: 'right' },
+                { id: 'timeline-5', date: 'Q1 2024', title: 'Mandate Published', align: 'left' },
+                { id: 'timeline-6', date: 'Q1 2025', title: 'The Pincer Converges', align: 'right' },
+            ];
+            
+            // --- END: Data Definitions ---
+
+
+            // --- START: Dynamic Content Injection ---
+            
+            // Function to build and inject the timeline
+            function buildTimeline() {
+                const container = document.getElementById('timeline-container');
+                timelineEvents.forEach(event => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = `timeline-item ${event.align}`;
+                    itemDiv.innerHTML = `
+                        <div class="timeline-content">
+                            <h4 class="text-2xl font-bold">${event.date}</h4>
+                            <p class="text-lg text-gray-300">${event.title}</p>
+                        </div>
+                    `;
+                    // Attach event listener to the dot for the modal
+                    const dot = document.createElement('div');
+                    dot.className = 'timeline-dot'; // For styling if needed
+                    itemDiv.id = event.id; // Set ID on the item for modal lookup
+                    itemDiv.addEventListener('click', () => showModal(event.id));
+                    container.appendChild(itemDiv);
+                });
+            }
+
+
+            // --- END: Dynamic Content Injection ---
+
+            // --- START: Modal Logic ---
             const modal = document.getElementById('modal');
             const modalBody = document.getElementById('modal-body');
-            const closeModal = document.getElementById('closeModal');
+            const closeModalBtn = document.getElementById('closeModal');
 
+            function showModal(id) {
+                const data = modalData[id];
+                if (data) {
+                    modalBody.innerHTML = `<h3 class="text-3xl mb-4 accent-red">${data.title}</h3><div class="text-gray-300 leading-relaxed">${data.content}</div>`;
+                    modal.classList.remove('hidden');
+                }
+            }
+
+            function hideModal() {
+                modal.classList.add('hidden');
+            }
+
+            // Event listeners for showing the modal from network nodes
             document.querySelectorAll('.node').forEach(node => {
-                node.addEventListener('click', () => {
-                    const data = modalData[node.id];
-                    if (data) {
-                        modalBody.innerHTML = `<h3 class="text-3xl mb-4 accent-red">${data.title}</h3><div class="text-gray-300 leading-relaxed">${data.content}</div>`;
-                        modal.classList.remove('hidden');
-                    }
-                });
+                node.addEventListener('click', () => showModal(node.id));
             });
 
-            closeModal.addEventListener('click', () => modal.classList.add('hidden'));
+            // Event listeners for closing the modal
+            closeModalBtn.addEventListener('click', hideModal);
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
-                    modal.classList.add('hidden');
+                    hideModal();
                 }
             });
 
-            // Tooltip and Label Logic
-            const tooltipTitleCallback = (tooltipItems) => {
-                const item = tooltipItems[0];
-                let label = item.chart.data.labels[item.dataIndex];
-                if (Array.isArray(label)) return label.join(' ');
-                return label;
-            };
+            // --- END: Modal Logic ---
+
+
+            // --- START: Chart and Tab Logic ---
 
             const chartJsDefaults = {
                 color: '#E0E0E0',
@@ -250,8 +454,7 @@
             Chart.defaults.color = chartJsDefaults.color;
             Chart.defaults.borderColor = chartJsDefaults.borderColor;
             Chart.defaults.font.family = chartJsDefaults.font.family;
-
-            // Chart Rendering
+            
             const ideologyCtx = document.getElementById('ideologyChart').getContext('2d');
             new Chart(ideologyCtx, {
                 type: 'bar',
@@ -270,18 +473,15 @@
                     plugins: {
                         legend: { display: false },
                         title: { display: true, text: 'Support for Political Violence (PRRI Data 2024)', font: { size: 18 } },
-                        tooltip: { callbacks: { title: tooltipTitleCallback } }
                     }
                 }
             });
 
-            // Tab functionality
             const tabsContainer = document.getElementById('tabs-container');
-            const tabButtons = tabsContainer.querySelectorAll('.tab-button');
             const tabContentContainer = document.getElementById('tab-content');
             
             const setActiveTab = (tabName) => {
-                 tabButtons.forEach(button => {
+                tabsContainer.querySelectorAll('.tab-button').forEach(button => {
                     button.classList.toggle('text-white', button.dataset.tab === tabName);
                     button.classList.toggle('border-accent-red', button.dataset.tab === tabName);
                     button.classList.toggle('text-gray-400', button.dataset.tab !== tabName);
@@ -311,7 +511,6 @@
                             plugins: {
                                 legend: { display: false },
                                 title: { display: true, text: 'Effectiveness of Mass Voter Challenges', font: { size: 18 } },
-                                tooltip: { callbacks: { title: tooltipTitleCallback } }
                             }
                         }
                     });
@@ -324,14 +523,21 @@
                 }
             });
             
-            setActiveTab('steeplechase');
-            
+            // --- END: Chart and Tab Logic ---
+
+            // --- START: Smooth Scrolling for Nav ---
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
                     document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
                 });
             });
+            // --- END: Smooth Scrolling ---
+
+
+            // --- Initialize Dynamic Content ---
+            buildTimeline();
+            setActiveTab('steeplechase');
         });
     </script>
 </body>
