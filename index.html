@@ -17,6 +17,8 @@
         :root { --accent-red: #E53E3E; }
         body { font-family: 'Roboto Slab', serif; background-color: #121212; color: #E0E0E0; }
         h1, h2, h3, .nav-item { font-family: 'Teko', sans-serif; font-weight: 600; }
+        body { font-family: 'Roboto Slab', Georgia, 'Times New Roman', serif; background-color: #121212; color: #E0E0E0; }
+        h1, h2, h3, .nav-item { font-family: 'Teko', Impact, sans-serif; font-weight: 600; }
         .accent-red { color: var(--accent-red); }
         .card { background-color: #1E1E1E; border: 1px solid #333; transition: all 0.3s ease-in-out; }
         .card:hover { border-color: var(--accent-red); box-shadow: 0 0 15px rgba(229, 62, 62, 0.2); }
@@ -29,6 +31,10 @@
         .modal-overlay.visible { opacity: 1; visibility: visible; }
         .modal-content { background-color: #1E1E1E; border: 1px solid var(--accent-red); max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; transform: scale(0.95); transition: transform 0.3s ease; }
         .modal-overlay.visible .modal-content { transform: scale(1); }
+        /* Timeline Styles */
+        #timeline-list { border-left: 2px solid #4A5568; }
+        #timeline-list li { position: relative; margin-left: 1rem; padding-left: 1rem; margin-bottom: 2rem; }
+        #timeline-list li::before { content: ''; position: absolute; left: -0.625rem; top: 0.25rem; width: 0.75rem; height: 0.75rem; background-color: var(--accent-red); border-radius: 50%; border: 2px solid #fff; }
     </style>
 </head>
 <body class="antialiased">
@@ -52,16 +58,19 @@
                 </p>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                     <div id="node-leo" class="node group">
+                    <div id="node-leo" class="node group" role="button" tabindex="0" aria-label="Details about Leonard Leo">
                         <h4 class="text-2xl">Leonard Leo</h4>
                         <p class="text-sm text-gray-400">The Architect</p>
                         <p class="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm italic">Strategic mastermind connecting money to judicial and political power.</p>
                     </div>
                      <div id="node-vought" class="node group">
+                     <div id="node-vought" class="node group" role="button" tabindex="0" aria-label="Details about Russell Vought">
                         <h4 class="text-2xl">Russell Vought</h4>
                         <p class="text-sm text-gray-400">The Bureaucrat</p>
                          <p class="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm italic">Project 2025 author aiming to dismantle the civil service from within.</p>
                     </div>
                      <div id="node-vanderplaats" class="node group">
+                     <div id="node-vanderplaats" class="node group" role="button" tabindex="0" aria-label="Details about Bob Vander Plaats">
                         <h4 class="text-2xl">Bob Vander Plaats</h4>
                         <p class="text-sm text-gray-400">The Mobilizer</p>
                          <p class="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm italic">Grassroots general translating ideology into state-level political action.</p>
@@ -87,29 +96,7 @@
                             <div class="node bg-gray-700 cursor-default">Attorney General (Independent)</div>
                             <div class="text-2xl">&darr;</div>
                             <div class="node bg-gray-700 cursor-default">Non-Partisan DOJ Civil Servants</div>
-                        </div>
-                     </div>
-                     <div class="border-2 border-accent-red rounded-lg p-4">
-                        <h5 class="text-xl text-center mb-4 accent-red">Project 2025 Proposed Structure</h5>
-                         <div class="space-y-4 text-center">
-                            <div class="node bg-red-900/50 cursor-default">The President</div>
-                            <div class="text-2xl accent-red">&darr;</div>
-                            <div class="node bg-red-900/50 cursor-default">Attorney General (Politically Aligned)</div>
-                            <div class="text-2xl accent-red">&darr;</div>
-                            <div class="node bg-red-900/50 cursor-default">Vetted Political Appointees</div>
-                        </div>
-                     </div>
-                 </div>
-                 <p class="text-center mt-6 text-gray-500 text-sm">This diagram illustrates the proposed shift from an independent DOJ to one directly subservient to the President's political agenda.</p>
-             </div>
-        </section>
-
-        <section id="ideology" class="py-16">
-            <h2 class="text-5xl text-center mb-4">The Ideology</h2>
-            <h3 class="text-2xl text-center accent-red mb-12 uppercase">The Seven Mountains Mandate</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="card p-8">
-                    <h4 class="text-3xl mb-4">A Doctrine of Dominion</h4>
+@@ -113,138 +117,184 @@
                     <p class="mb-6 leading-relaxed">The ideological fuel for the movement is the Seven Mountains Mandate (7MM), a dominionist doctrine positing that Christians are divinely ordained to achieve control over the seven key spheres of societal influence.</p>
                     <div class="text-lg italic border-l-4 border-accent-red pl-4 text-gray-300">
                         "This isn't a political rally... It's where the people of God, the citizens of heaven, bring heaven to earth."
@@ -136,18 +123,22 @@
                  <div class="space-y-4">
                      <div class="text-center">
                         <div id="node-seid" class="node inline-block"><h4 class="text-xl">Barre Seid</h4><p>$1.6B Donation</p></div>
+                        <div id="node-seid" class="node inline-block" role="button" tabindex="0" aria-label="Details about Barre Seid"><h4 class="text-xl">Barre Seid</h4><p>$1.6B Donation</p></div>
                     </div>
                     <div class="text-center text-4xl accent-red transform rotate-90">⇙</div>
                     <div class="text-center">
                         <div id="node-mft" class="node inline-block bg-gray-900 border-accent-red"><h4 class="text-xl">Marble Freedom Trust</h4><p>(Chaired by Leonard Leo)</p></div>
+                        <div id="node-mft" class="node inline-block bg-gray-900 border-accent-red" role="button" tabindex="0" aria-label="Details about Marble Freedom Trust"><h4 class="text-xl">Marble Freedom Trust</h4><p>(Chaired by Leonard Leo)</p></div>
                     </div>
                      <div class="w-full flex justify-center my-4"><div class="w-px bg-gray-700 h-16"></div></div>
                     <div class="text-center"><div class="text-3xl">&darr;</div></div>
                     <div class="flex flex-col md:flex-row justify-around">
                         <div id="node-donors" class="node w-full md:w-2/5 mb-4 md:mb-0">
+                        <div id="node-donors" class="node w-full md:w-2/5 mb-4 md:mb-0" role="button" tabindex="0" aria-label="Details about DonorsTrust">
                             <h4 class="text-xl">DonorsTrust</h4><p>"Dark Money ATM"</p>
                         </div>
                          <div id="node-85fund" class="node w-full md:w-2/5">
+                         <div id="node-85fund" class="node w-full md:w-2/5" role="button" tabindex="0" aria-label="Details about The 85 Fund">
                              <h4 class="text-xl">The 85 Fund</h4><p>HEP & Legal Groups</p>
                         </div>
                      </div>
@@ -169,11 +160,18 @@
                  </div>
              </div>
         </section>
+
+        <section id="timeline" class="py-16">
+            <h2 class="text-5xl text-center mb-4">The Timeline</h2>
+            <h3 class="text-2xl text-center accent-red mb-12 uppercase">Chronology of Convergence</h3>
+            <ul id="timeline-list" class="max-w-3xl mx-auto"></ul>
+        </section>
     </main>
 
     <div id="modal" class="modal-overlay">
         <div class="modal-content rounded-lg shadow-xl p-6 relative">
             <button id="closeModal" class="absolute top-2 right-4 text-3xl text-gray-500 hover:text-white">&times;</button>
+            <button id="closeModal" class="absolute top-2 right-4 text-3xl text-gray-500 hover:text-white" aria-label="Close modal">&times;</button>
             <div id="modal-body"></div>
         </div>
     </div>
@@ -208,14 +206,46 @@
             const modal = document.getElementById('modal');
             const modalBody = document.getElementById('modal-body');
             const closeModal = document.getElementById('closeModal');
+            let lastFocusedElement = null;
+            let firstFocusable = null;
+            let lastFocusable = null;
+
+            const trapFocus = (e) => {
+                if (e.key === 'Tab') {
+                    const focusableElements = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+                    if (focusableElements.length > 0) {
+                        firstFocusable = focusableElements[0];
+                        lastFocusable = focusableElements[focusableElements.length - 1];
+                        if (e.shiftKey) {
+                            if (document.activeElement === firstFocusable) {
+                                e.preventDefault();
+                                lastFocusable.focus();
+                            }
+                        } else {
+                            if (document.activeElement === lastFocusable) {
+                                e.preventDefault();
+                                firstFocusable.focus();
+                            }
+                        }
+                    }
+                }
+            };
 
             const showModal = (data) => {
+            const showModal = (data, trigger) => {
+                lastFocusedElement = trigger;
                 modalBody.innerHTML = `<h3 class="text-3xl mb-4 accent-red">${data.title}</h3><div class="text-gray-300 leading-relaxed">${data.content}</div>`;
                 modal.classList.add('visible');
+                modal.addEventListener('keydown', trapFocus);
+                closeModal.focus();
             };
 
             const hideModal = () => {
                 modal.classList.remove('visible');
+                modal.removeEventListener('keydown', trapFocus);
+                if (lastFocusedElement) {
+                    lastFocusedElement.focus();
+                }
             };
 
             document.querySelectorAll('.node').forEach(node => {
@@ -223,6 +253,16 @@
                     const data = modalData[node.id];
                     if (data) {
                         showModal(data);
+                        showModal(data, node);
+                    }
+                });
+                node.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        const data = modalData[node.id];
+                        if (data) {
+                            showModal(data, node);
+                        }
                     }
                 });
             });
@@ -248,70 +288,7 @@
                 return label;
             };
 
-            const chartJsDefaults = {
-                color: '#E0E0E0',
-                borderColor: '#4A5568',
-                font: { family: "'Roboto Slab', serif" }
-            };
-            Chart.defaults.color = chartJsDefaults.color;
-            Chart.defaults.borderColor = chartJsDefaults.borderColor;
-            Chart.defaults.font.family = chartJsDefaults.font.family;
-
-            // Chart Rendering
-            const ideologyCtx = document.getElementById('ideologyChart').getContext('2d');
-            new Chart(ideologyCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['Christian Nationalist Adherents', 'Christian Nationalist Sympathizers'],
-                    datasets: [{
-                        label: 'Agree "True American patriots may have to resort to violence to save our country"',
-                        data: [38, 33],
-                        backgroundColor: '#E53E3E',
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: { y: { beginAtZero: true, max: 50, ticks: { callback: value => value + '%' } } },
-                    plugins: {
-                        legend: { display: false },
-                        title: { display: true, text: 'Support for Political Violence (PRRI Data 2024)', font: { size: 18 } },
-                        tooltip: { callbacks: { title: tooltipTitleCallback } }
-                    }
-                }
-            });
-
-            // Tab functionality
-            const tabsContainer = document.getElementById('tabs-container');
-            const tabButtons = tabsContainer.querySelectorAll('.tab-button');
-            const tabContentContainer = document.getElementById('tab-content');
-
-            const setActiveTab = (tabName) => {
-                 tabButtons.forEach(button => {
-                    button.classList.toggle('text-white', button.dataset.tab === tabName);
-                    button.classList.toggle('border-accent-red', button.dataset.tab === tabName);
-                    button.classList.toggle('text-gray-400', button.dataset.tab !== tabName);
-                    button.classList.toggle('border-transparent', button.dataset.tab !== tabName);
-                });
-
-                const content = tabContentData[tabName];
-                tabContentContainer.innerHTML = `<div id="${tabName}" class="tab-pane"><h4 class="text-3xl mb-4">${content.title}</h4>${content.content}</div>`;
-
-                if (tabName === 'checkmate') {
-                    setTimeout(() => {
-                        const tacticsCanvas = document.getElementById('tacticsChart');
-                        if (tacticsCanvas) {
-                            const tacticsCtx = tacticsCanvas.getContext('2d');
-                            new Chart(tacticsCtx, {
-                                type: 'bar',
-                                data: {
-                                    labels: ['Voter Registrations Challenged (GA)', 'Registrations Removed'],
-                                    datasets: [{
-                                        label: 'Number of Voters',
-                                        data: [63000, 630],
-                                        backgroundColor: ['#4A5568', '#E53E3E'],
-                                        borderWidth: 1
-                                    }]
+@@ -315,29 +365,59 @@
                                 },
                                 options: {
                                     indexAxis: 'y',
@@ -336,6 +313,36 @@
             });
 
             setActiveTab('steeplechase');
+
+            // Timeline Rendering
+            const timelineEvents = [
+                { date: '1975', title: 'Seven Mountains Mandate', content: '<p>The dominionist Seven Mountains Mandate emerges from a purported revelation to Loren Cunningham and Bill Bright.</p>' },
+                { date: 'Q2 2021', title: 'The Seid Donation', content: '<p>Barre Seid donates his $1.6 billion electronics company to the Marble Freedom Trust, creating an unprecedented funding source.</p>' },
+                { date: 'Q1 2022', title: 'Project 2025 Launch', content: '<p>The Heritage Foundation launches the Project 2025 coalition, beginning work on a 920-page blueprint to reshape the federal government.</p>' },
+                { date: 'Q1 2024', title: 'Mandate for Leadership Published', content: '<p>Project 2025 releases its playbook detailing plans to implement Schedule F and politicize the Department of Justice.</p>' },
+                { date: 'Q4 2024', title: 'EagleAI Deployed', content: '<p>Activist groups begin using EagleAI software to automate identification of voters for mass challenges.</p>' },
+                { date: 'Q1 2025', title: 'The Pincer Becomes Clear', content: '<p>The convergence of bureaucratic deconstruction and electoral disruption is fully mature and aimed at the same goal.</p>' }
+            ];
+
+            const timelineList = document.getElementById('timeline-list');
+            timelineEvents.forEach(ev => {
+                const li = document.createElement('li');
+                const btn = document.createElement('button');
+                btn.className = 'node text-left w-full';
+                btn.setAttribute('role', 'button');
+                btn.setAttribute('tabindex', '0');
+                btn.setAttribute('aria-label', ev.title);
+                btn.innerHTML = `<span class="font-semibold">${ev.date}</span> - ${ev.title}`;
+                btn.addEventListener('click', () => showModal(ev, btn));
+                btn.addEventListener('keydown', e => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        showModal(ev, btn);
+                    }
+                });
+                li.appendChild(btn);
+                timelineList.appendChild(li);
+            });
 
         });
     </script>
