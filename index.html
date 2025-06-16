@@ -10,15 +10,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;700&family=Teko:wght@400;600;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Dark Mode with Red Accents, inspired by exposed1.substack.com -->
-    <!-- Application Structure Plan: The SPA is structured as a thematic, scrollable dossier. This non-linear structure lets users explore the complex, interconnected system at their own pace. Interactive elements like clickable nodes for information pop-ups, tabbed content, and dynamic charts are used to manage information density and encourage deep exploration of the evidence. -->
+    <!-- Application Structure Plan: The SPA is structured as a thematic, scrollable dossier. A sticky navigation bar allows users to jump to key pillars of the investigation. This non-linear structure lets users explore the complex, interconnected system at their own pace. Interactive elements like clickable nodes for information pop-ups, tabbed content, and dynamic charts are used to manage information density and encourage deep exploration of the evidence. -->
     <!-- Visualization & Content Choices: Goal: Organize/Relationships -> Viz: Enhanced HTML/CSS flowcharts and network diagrams with clickable nodes that trigger modal pop-ups for detailed information. This method is chosen to visually map the complex, non-linear relationships between actors, finances, and institutions, directly responding to the EIC's desire for a "Systemic Network Analysis." NO SVG/Mermaid. Goal: Inform/Compare -> Viz: Chart.js Donut and Bar charts present key statistics (polling data, voter challenges) in an easily digestible format. Rendered to Canvas. Goal: Organize/Inform -> Viz: "Big Number" cards and tabbed content areas break down the dense information of Project 2025 and its tactics into interactive, manageable chunks. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         :root { --accent-red: #E53E3E; }
         body { font-family: 'Roboto Slab', serif; background-color: #121212; color: #E0E0E0; }
         h1, h2, h3, .nav-item { font-family: 'Teko', sans-serif; font-weight: 600; }
-        body { font-family: 'Roboto Slab', Georgia, 'Times New Roman', serif; background-color: #121212; color: #E0E0E0; }
-        h1, h2, h3, .nav-item { font-family: 'Teko', Impact, sans-serif; font-weight: 600; }
         .accent-red { color: var(--accent-red); }
         .card { background-color: #1E1E1E; border: 1px solid #333; transition: all 0.3s ease-in-out; }
         .card:hover { border-color: var(--accent-red); box-shadow: 0 0 15px rgba(229, 62, 62, 0.2); }
@@ -27,25 +25,35 @@
         .node { border: 1px solid #4A5568; padding: 1rem; text-align: center; border-radius: 0.5rem; background-color: #2D3748; transition: all 0.3s ease; cursor: pointer; position: relative; z-index: 10; }
         .node:hover { transform: translateY(-5px); box-shadow: 0 4px 8px rgba(0,0,0,0.5); border-color: var(--accent-red); }
         .line { position: absolute; background-color: #4A5568; z-index: 1; }
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.75); z-index: 100; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease; }
-        .modal-overlay.visible { opacity: 1; visibility: visible; }
-        .modal-content { background-color: #1E1E1E; border: 1px solid var(--accent-red); max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; transform: scale(0.95); transition: transform 0.3s ease; }
-        .modal-overlay.visible .modal-content { transform: scale(1); }
-        /* Timeline Styles */
-        #timeline-list { border-left: 2px solid #4A5568; }
-        #timeline-list li { position: relative; margin-left: 1rem; padding-left: 1rem; margin-bottom: 2rem; }
-        #timeline-list li::before { content: ''; position: absolute; left: -0.625rem; top: 0.25rem; width: 0.75rem; height: 0.75rem; background-color: var(--accent-red); border-radius: 50%; border: 2px solid #fff; }
+        .sticky-nav { position: sticky; top: 0; z-index: 50; background-color: rgba(18, 18, 18, 0.8); backdrop-filter: blur(10px); }
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.75); z-index: 100; display: flex; align-items: center; justify-content: center; }
+        .modal-content { background-color: #1E1E1E; border: 1px solid var(--accent-red); max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; }
     </style>
 </head>
 <body class="antialiased">
+
+    <nav id="navbar" class="sticky-nav shadow-lg border-b border-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <h1 class="text-3xl uppercase text-white">The Pincer Movement</h1>
+                <div class="hidden md:flex space-x-6 text-lg uppercase">
+                    <a href="#alliance" class="nav-item text-gray-300 hover:text-accent-red transition duration-300">The Alliance</a>
+                    <a href="#ideology" class="nav-item text-gray-300 hover:text-accent-red transition duration-300">The Ideology</a>
+                    <a href="#blueprint" class="nav-item text-gray-300 hover:text-accent-red transition duration-300">The Blueprint</a>
+                    <a href="#money" class="nav-item text-gray-300 hover:text-accent-red transition duration-300">The Money</a>
+                    <a href="#tactics" class="nav-item text-gray-300 hover:text-accent-red transition duration-300">The Tactics</a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
     <main class="container mx-auto p-4 md:p-8">
 
         <header class="text-center my-12 md:my-20">
             <h1 class="text-6xl md:text-8xl font-bold uppercase tracking-wider text-white">The Pincer Movement</h1>
-            <h2 class="text-2xl md:text-4xl mt-2 accent-red uppercase tracking-wide">An Interactive Dossier</h2>
+            <h2 class="text-2xl md:text-4xl mt-2 accent-red uppercase tracking-wide">An Architecture of Autocracy</h2>
             <p class="max-w-3xl mx-auto mt-6 text-lg text-gray-400">
-                This interactive dossier exposes a deeply integrated, two-pronged assault on the foundations of American pluralism and democratic governance. It is not a story of two separate movements, but a forensic analysis of a coordinated campaign to reshape the United States from both within and without its institutions of power.
+                This investigation exposes a deeply integrated, two-pronged assault on the foundations of American pluralism and democratic governance. It is not a story of two separate movements, but a forensic analysis of a coordinated campaign to reshape the United States from both within and without its institutions of power.
             </p>
         </header>
 
@@ -56,47 +64,38 @@
                  <p class="text-lg mb-8 leading-relaxed text-center">
                     The Pincer Movement is defined by the symbiotic relationship between its ideological and bureaucratic arms, connected by key personnel who operate across multiple organizations. This is not a loose coalition but a tightly integrated network. <span class="font-bold accent-red">Click on any node below to explore the connections.</span>
                 </p>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                    <div id="node-leo" class="node group">
-                    <div id="node-leo" class="node group" role="button" tabindex="0" aria-label="Details about Leonard Leo">
-                        <h4 class="text-2xl">Leonard Leo</h4>
-                        <p class="text-sm text-gray-400">The Architect</p>
-                        <p class="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm italic">Strategic mastermind connecting money to judicial and political power.</p>
+                <div class="relative h-[600px] md:h-[400px]">
+                    <!-- Lines -->
+                    <div class="line" style="left: 25%; top: 25%; width: 50%; height: 2px;"></div>
+                    <div class="line" style="left: 25%; top: 25%; width: 2px; height: 50%;"></div>
+                    <div class="line" style="left: 75%; top: 25%; width: 2px; height: 50%;"></div>
+
+                    <!-- Nodes -->
+                    <div id="node-leo" class="node absolute w-48" style="left: calc(50% - 6rem); top: 0;">
+                        <h4 class="text-xl">Leonard Leo</h4><p class="text-sm text-gray-400">The Architect</p>
                     </div>
-                     <div id="node-vought" class="node group">
-                     <div id="node-vought" class="node group" role="button" tabindex="0" aria-label="Details about Russell Vought">
-                        <h4 class="text-2xl">Russell Vought</h4>
-                        <p class="text-sm text-gray-400">The Bureaucrat</p>
-                         <p class="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm italic">Project 2025 author aiming to dismantle the civil service from within.</p>
+                    <div id="node-vought" class="node absolute w-48" style="left: 0; top: calc(50% - 3rem);">
+                        <h4 class="text-xl">Russell Vought</h4><p class="text-sm text-gray-400">The Bureaucrat</p>
                     </div>
-                     <div id="node-vanderplaats" class="node group">
-                     <div id="node-vanderplaats" class="node group" role="button" tabindex="0" aria-label="Details about Bob Vander Plaats">
-                        <h4 class="text-2xl">Bob Vander Plaats</h4>
-                        <p class="text-sm text-gray-400">The Mobilizer</p>
-                         <p class="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm italic">Grassroots general translating ideology into state-level political action.</p>
+                    <div id="node-vanderplaats" class="node absolute w-48" style="right: 0; top: calc(50% - 3rem);">
+                        <h4 class="text-xl">Bob Vander Plaats</h4><p class="text-sm text-gray-400">The Mobilizer</p>
+                    </div>
+                    <div id="node-heritage" class="node absolute w-48" style="left: calc(25% - 6rem); bottom: 0;">
+                        <h4 class="text-xl">Project 2025</h4><p class="text-sm text-gray-400">(The Heritage Foundation)</p>
+                    </div>
+                    <div id="node-tfl" class="node absolute w-48" style="right: calc(25% - 6rem); bottom: 0;">
+                         <h4 class="text-xl">The Family Leader</h4><p class="text-sm text-gray-400">(Christian Nationalism)</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="blueprint" class="py-16">
-            <h2 class="text-5xl text-center mb-4">The Blueprint</h2>
-            <h3 class="text-2xl text-center accent-red mb-12 uppercase">Project 2025's Mandate</h3>
-             <p class="max-w-4xl mx-auto text-center text-lg text-gray-400 mb-12">
-                Project 2025 is a 920-page operational blueprint to consolidate executive power by purging the civil service and politicizing the Department of Justice. The proposed restructuring represents a fundamental threat to the independence of federal law enforcement.
-            </p>
-             <div class="card p-8">
-                 <h4 class="text-3xl mb-6 text-center">Visualizing the Threat: DOJ Structure</h4>
-                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                     <div class="border-2 border-gray-600 rounded-lg p-4">
-                        <h5 class="text-xl text-center mb-4 text-gray-400">Current Structure</h5>
-                        <div class="space-y-4 text-center">
-                            <div class="node bg-gray-700 cursor-default">The President</div>
-                            <div class="text-2xl">&darr;</div>
-                            <div class="node bg-gray-700 cursor-default">Attorney General (Independent)</div>
-                            <div class="text-2xl">&darr;</div>
-                            <div class="node bg-gray-700 cursor-default">Non-Partisan DOJ Civil Servants</div>
-@@ -113,138 +117,184 @@
+        <section id="ideology" class="py-16">
+            <h2 class="text-5xl text-center mb-4">The Ideology</h2>
+            <h3 class="text-2xl text-center accent-red mb-12 uppercase">The Seven Mountains Mandate</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="card p-8">
+                    <h4 class="text-3xl mb-4">A Doctrine of Dominion</h4>
                     <p class="mb-6 leading-relaxed">The ideological fuel for the movement is the Seven Mountains Mandate (7MM), a dominionist doctrine positing that Christians are divinely ordained to achieve control over the seven key spheres of societal influence.</p>
                     <div class="text-lg italic border-l-4 border-accent-red pl-4 text-gray-300">
                         "This isn't a political rally... It's where the people of God, the citizens of heaven, bring heaven to earth."
@@ -113,6 +112,24 @@
             </div>
         </section>
 
+        <section id="blueprint" class="py-16">
+            <h2 class="text-5xl text-center mb-4">The Blueprint</h2>
+            <h3 class="text-2xl text-center accent-red mb-12 uppercase">Project 2025's Mandate</h3>
+             <p class="max-w-4xl mx-auto text-center text-lg text-gray-400 mb-12">
+                Project 2025 is a 920-page operational blueprint for a radical restructuring of the federal government. It's a detailed plan to consolidate executive power by purging the civil service and politicizing the Department of Justice.
+            </p>
+             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="card p-8">
+                    <h4 class="text-3xl mb-4">Mechanism 1: Schedule F</h4>
+                    <p class="leading-relaxed">A plan to reclassify up to **50,000** federal employees, stripping their job protections. This allows them to be fired and replaced with individuals vetted for ideological loyalty, creating a subservient workforce.</p>
+                </div>
+                 <div class="card p-8">
+                    <h4 class="text-3xl mb-4">Mechanism 2: DOJ Capture</h4>
+                    <p class="leading-relaxed">A "top-to-bottom overhaul" of the Department of Justice to ensure litigation and investigations are "consistent with the President’s agenda," effectively turning the DOJ into a political weapon.</p>
+                </div>
+            </div>
+        </section>
+
         <section id="money" class="py-16">
             <h2 class="text-5xl text-center mb-4">The Money</h2>
             <h3 class="text-2xl text-center accent-red mb-12 uppercase">The Dark Money Engine</h3>
@@ -123,22 +140,18 @@
                  <div class="space-y-4">
                      <div class="text-center">
                         <div id="node-seid" class="node inline-block"><h4 class="text-xl">Barre Seid</h4><p>$1.6B Donation</p></div>
-                        <div id="node-seid" class="node inline-block" role="button" tabindex="0" aria-label="Details about Barre Seid"><h4 class="text-xl">Barre Seid</h4><p>$1.6B Donation</p></div>
                     </div>
                     <div class="text-center text-4xl accent-red transform rotate-90">⇙</div>
                     <div class="text-center">
                         <div id="node-mft" class="node inline-block bg-gray-900 border-accent-red"><h4 class="text-xl">Marble Freedom Trust</h4><p>(Chaired by Leonard Leo)</p></div>
-                        <div id="node-mft" class="node inline-block bg-gray-900 border-accent-red" role="button" tabindex="0" aria-label="Details about Marble Freedom Trust"><h4 class="text-xl">Marble Freedom Trust</h4><p>(Chaired by Leonard Leo)</p></div>
                     </div>
                      <div class="w-full flex justify-center my-4"><div class="w-px bg-gray-700 h-16"></div></div>
-                    <div class="text-center"><div class="text-3xl">&darr;</div></div>
+                    <div class="text-center"><div class="flowchart-arrow text-3xl">&darr;</div></div>
                     <div class="flex flex-col md:flex-row justify-around">
                         <div id="node-donors" class="node w-full md:w-2/5 mb-4 md:mb-0">
-                        <div id="node-donors" class="node w-full md:w-2/5 mb-4 md:mb-0" role="button" tabindex="0" aria-label="Details about DonorsTrust">
                             <h4 class="text-xl">DonorsTrust</h4><p>"Dark Money ATM"</p>
                         </div>
                          <div id="node-85fund" class="node w-full md:w-2/5">
-                         <div id="node-85fund" class="node w-full md:w-2/5" role="button" tabindex="0" aria-label="Details about The 85 Fund">
                              <h4 class="text-xl">The 85 Fund</h4><p>HEP & Legal Groups</p>
                         </div>
                      </div>
@@ -161,22 +174,17 @@
              </div>
         </section>
 
-        <section id="timeline" class="py-16">
-            <h2 class="text-5xl text-center mb-4">The Timeline</h2>
-            <h3 class="text-2xl text-center accent-red mb-12 uppercase">Chronology of Convergence</h3>
-            <ul id="timeline-list" class="max-w-3xl mx-auto"></ul>
-        </section>
     </main>
-
-    <div id="modal" class="modal-overlay">
+    
+    <div id="modal" class="modal-overlay hidden">
         <div class="modal-content rounded-lg shadow-xl p-6 relative">
             <button id="closeModal" class="absolute top-2 right-4 text-3xl text-gray-500 hover:text-white">&times;</button>
-            <button id="closeModal" class="absolute top-2 right-4 text-3xl text-gray-500 hover:text-white" aria-label="Close modal">&times;</button>
             <div id="modal-body"></div>
         </div>
     </div>
 
-    <footer class="border-t border-gray-800 py-8 mt-16">
+
+    <footer class="border-t border-gray-800 py-8">
         <div class="container mx-auto px-4 text-center text-gray-500">
             <p>&copy; 2025 Reclaiming Democracy's Promise. All Rights Reserved.</p>
             <p class="text-sm mt-2">This interactive dossier is based on the keystone report "THE PINCER MOVEMENT: An Architecture of Autocracy."</p>
@@ -190,6 +198,8 @@
                 'node-leo': { title: 'Leonard Leo: The Architect', content: '<p>A key conservative legal strategist. Chairs the Marble Freedom Trust and is a central figure in The 85 Fund and the Federalist Society. Orchestrates funding and judicial strategy for the conservative movement.</p>' },
                 'node-vought': { title: 'Russell Vought: The Bureaucrat', content: '<p>Former OMB Director and a lead author of Project 2025. A self-described "Christian Nation-ist" who advocates for dismantling the administrative state and using government power to enforce ideological goals.</p>' },
                 'node-vanderplaats': { title: 'Bob Vander Plaats: The Mobilizer', content: '<p>President & CEO of The Family Leader, an influential Christian Nationalist group in Iowa. Expert at grassroots mobilization and translating theological goals into state-level policy and political pressure.</p>' },
+                'node-heritage': { title: 'Project 2025 (The Heritage Foundation)', content: '<p>A 920-page blueprint for a radical overhaul of the federal government. Its "Mandate for Leadership" details plans for purging the civil service (Schedule F) and politicizing the Department of Justice.</p>' },
+                'node-tfl': { title: 'The Family Leader', content: '<p>A Christian Nationalist organization that seeks to embed "biblical values" into government. Instrumental in passing legislation like SF 418 in Iowa and mobilizing a conservative religious voting bloc.</p>' },
                 'node-seid': { title: 'Barre Seid: The Megadonor', content: '<p>Donated his $1.6 billion electronics company, Tripp Lite, to the Marble Freedom Trust in 2021. This transaction is likely the largest single political donation in U.S. history, creating a massive financial engine for the conservative movement.</p>'},
                 'node-mft': { title: 'Marble Freedom Trust', content: '<p>Chaired by Leonard Leo, this trust received the $1.6B contribution from Barre Seid. It acts as a central financial hub, granting tens of millions to other conservative DAFs and organizations to "crush liberal dominance."</p>'},
                 'node-donors': { title: 'DonorsTrust', content: '<p>A major Donor-Advised Fund (DAF) often called the "dark money ATM of the political right." It receives funds from entities like MFT and channels them to a vast network of conservative groups, including The Heritage Foundation and the Alliance Defending Freedom, often obscuring the original donors.</p>'},
@@ -206,77 +216,21 @@
             const modal = document.getElementById('modal');
             const modalBody = document.getElementById('modal-body');
             const closeModal = document.getElementById('closeModal');
-            let lastFocusedElement = null;
-            let firstFocusable = null;
-            let lastFocusable = null;
-
-            const trapFocus = (e) => {
-                if (e.key === 'Tab') {
-                    const focusableElements = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-                    if (focusableElements.length > 0) {
-                        firstFocusable = focusableElements[0];
-                        lastFocusable = focusableElements[focusableElements.length - 1];
-                        if (e.shiftKey) {
-                            if (document.activeElement === firstFocusable) {
-                                e.preventDefault();
-                                lastFocusable.focus();
-                            }
-                        } else {
-                            if (document.activeElement === lastFocusable) {
-                                e.preventDefault();
-                                firstFocusable.focus();
-                            }
-                        }
-                    }
-                }
-            };
-
-            const showModal = (data) => {
-            const showModal = (data, trigger) => {
-                lastFocusedElement = trigger;
-                modalBody.innerHTML = `<h3 class="text-3xl mb-4 accent-red">${data.title}</h3><div class="text-gray-300 leading-relaxed">${data.content}</div>`;
-                modal.classList.add('visible');
-                modal.addEventListener('keydown', trapFocus);
-                closeModal.focus();
-            };
-
-            const hideModal = () => {
-                modal.classList.remove('visible');
-                modal.removeEventListener('keydown', trapFocus);
-                if (lastFocusedElement) {
-                    lastFocusedElement.focus();
-                }
-            };
 
             document.querySelectorAll('.node').forEach(node => {
                 node.addEventListener('click', () => {
                     const data = modalData[node.id];
                     if (data) {
-                        showModal(data);
-                        showModal(data, node);
-                    }
-                });
-                node.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        const data = modalData[node.id];
-                        if (data) {
-                            showModal(data, node);
-                        }
+                        modalBody.innerHTML = `<h3 class="text-3xl mb-4 accent-red">${data.title}</h3><div class="text-gray-300 leading-relaxed">${data.content}</div>`;
+                        modal.classList.remove('hidden');
                     }
                 });
             });
 
-            closeModal.addEventListener('click', hideModal);
+            closeModal.addEventListener('click', () => modal.classList.add('hidden'));
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
-                    hideModal();
-                }
-            });
-
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    hideModal();
+                    modal.classList.add('hidden');
                 }
             });
 
@@ -288,21 +242,79 @@
                 return label;
             };
 
-@@ -315,29 +365,59 @@
-                                },
-                                options: {
-                                    indexAxis: 'y',
-                                    responsive: true,
-                                    maintainAspectRatio: false,
-                                    plugins: {
-                                        legend: { display: false },
-                                        title: { display: true, text: 'Effectiveness of Mass Voter Challenges', font: { size: 18 } },
-                                        tooltip: { callbacks: { title: tooltipTitleCallback } }
-                                    }
-                                }
-                            });
+            const chartJsDefaults = {
+                color: '#E0E0E0',
+                borderColor: '#4A5568',
+                font: { family: "'Roboto Slab', serif" }
+            };
+            Chart.defaults.color = chartJsDefaults.color;
+            Chart.defaults.borderColor = chartJsDefaults.borderColor;
+            Chart.defaults.font.family = chartJsDefaults.font.family;
+
+            // Chart Rendering
+            const ideologyCtx = document.getElementById('ideologyChart').getContext('2d');
+            new Chart(ideologyCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Christian Nationalist Adherents', 'Christian Nationalist Sympathizers'],
+                    datasets: [{
+                        label: 'Agree "True American patriots may have to resort to violence to save our country"',
+                        data: [38, 33],
+                        backgroundColor: '#E53E3E',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true, max: 50, ticks: { callback: value => value + '%' } } },
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: true, text: 'Support for Political Violence (PRRI Data 2024)', font: { size: 18 } },
+                        tooltip: { callbacks: { title: tooltipTitleCallback } }
+                    }
+                }
+            });
+
+            // Tab functionality
+            const tabsContainer = document.getElementById('tabs-container');
+            const tabButtons = tabsContainer.querySelectorAll('.tab-button');
+            const tabContentContainer = document.getElementById('tab-content');
+            
+            const setActiveTab = (tabName) => {
+                 tabButtons.forEach(button => {
+                    button.classList.toggle('text-white', button.dataset.tab === tabName);
+                    button.classList.toggle('border-accent-red', button.dataset.tab === tabName);
+                    button.classList.toggle('text-gray-400', button.dataset.tab !== tabName);
+                    button.classList.toggle('border-transparent', button.dataset.tab !== tabName);
+                });
+                
+                const content = tabContentData[tabName];
+                tabContentContainer.innerHTML = `<div id="${tabName}" class="tab-pane"><h4 class="text-3xl mb-4">${content.title}</h4>${content.content}</div>`;
+
+                if (tabName === 'checkmate') {
+                    const tacticsCtx = document.getElementById('tacticsChart').getContext('2d');
+                    new Chart(tacticsCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Voter Registrations Challenged (GA)', 'Registrations Removed'],
+                            datasets: [{
+                                label: 'Number of Voters',
+                                data: [63000, 630],
+                                backgroundColor: ['#4A5568', '#E53E3E'],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            indexAxis: 'y',
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { display: false },
+                                title: { display: true, text: 'Effectiveness of Mass Voter Challenges', font: { size: 18 } },
+                                tooltip: { callbacks: { title: tooltipTitleCallback } }
+                            }
                         }
-                    }, 100);
+                    });
                 }
             };
 
@@ -311,39 +323,15 @@
                     setActiveTab(e.target.dataset.tab);
                 }
             });
-
+            
             setActiveTab('steeplechase');
-
-            // Timeline Rendering
-            const timelineEvents = [
-                { date: '1975', title: 'Seven Mountains Mandate', content: '<p>The dominionist Seven Mountains Mandate emerges from a purported revelation to Loren Cunningham and Bill Bright.</p>' },
-                { date: 'Q2 2021', title: 'The Seid Donation', content: '<p>Barre Seid donates his $1.6 billion electronics company to the Marble Freedom Trust, creating an unprecedented funding source.</p>' },
-                { date: 'Q1 2022', title: 'Project 2025 Launch', content: '<p>The Heritage Foundation launches the Project 2025 coalition, beginning work on a 920-page blueprint to reshape the federal government.</p>' },
-                { date: 'Q1 2024', title: 'Mandate for Leadership Published', content: '<p>Project 2025 releases its playbook detailing plans to implement Schedule F and politicize the Department of Justice.</p>' },
-                { date: 'Q4 2024', title: 'EagleAI Deployed', content: '<p>Activist groups begin using EagleAI software to automate identification of voters for mass challenges.</p>' },
-                { date: 'Q1 2025', title: 'The Pincer Becomes Clear', content: '<p>The convergence of bureaucratic deconstruction and electoral disruption is fully mature and aimed at the same goal.</p>' }
-            ];
-
-            const timelineList = document.getElementById('timeline-list');
-            timelineEvents.forEach(ev => {
-                const li = document.createElement('li');
-                const btn = document.createElement('button');
-                btn.className = 'node text-left w-full';
-                btn.setAttribute('role', 'button');
-                btn.setAttribute('tabindex', '0');
-                btn.setAttribute('aria-label', ev.title);
-                btn.innerHTML = `<span class="font-semibold">${ev.date}</span> - ${ev.title}`;
-                btn.addEventListener('click', () => showModal(ev, btn));
-                btn.addEventListener('keydown', e => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        showModal(ev, btn);
-                    }
+            
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
                 });
-                li.appendChild(btn);
-                timelineList.appendChild(li);
             });
-
         });
     </script>
 </body>
